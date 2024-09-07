@@ -1,0 +1,9 @@
+#myBoard_title{
+    margin: 50px;
+}
+.myBoard_header hr {
+    width: 1000px;
+    margin-top: 50px;
+    margin-bottom: 100px;
+    border-top: 1.5px solid rgb(197, 197, 197);
+}

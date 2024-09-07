@@ -1,23 +1,23 @@
-#login_title{
+#findPw_title{
     margin: 50px;
 }
-.login_header p {
+.findPw_header p {
     font-size: 20px;
 }
-.login_header hr {
+.findPw_header hr {
     width: 1000px;
     margin-top: 50px;
     margin-bottom: 100px;
     border-top: 1.5px solid rgb(197, 197, 197);
 }
 
-.login_input{
+.findPw_input{
     display:flex;
     flex-direction: column;
     align-items: center;
 }
 
-.userIdLogin, .userPasswordLogin{
+.userName, .userPhone, .userIdLogin{
     width: 400px;
     height: 50px;
     border: 1px solid gray;
@@ -26,14 +26,14 @@
     margin-bottom: 10px;
 }
 
-.login_bt{
+.findPw_bt{
     display:flex;
     flex-direction: column;
     align-items: center;
 }
 
-#loginBt{
-    background-color: rgb(160, 121, 75);
+#findPwBt{
+    background-color: gray;
     color: white;
     border: none;
     border-radius: 10px;
@@ -43,27 +43,16 @@
     margin: 20px 0 10px 0;
 }
 
-#signUpBt{
-    background-color: gray;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 17px;
-    height: 50px;
-    width: 350px;
-    margin: 20px 0 20px 0;
-}
-
-#loginBt:hover, #signUpBt:hover {
+#findPwBt:hover {
     background-color: #cccccc;
 }
 
-.login_menu a {
+.findPw_menu a {
     text-decoration: none;
     margin: 0 10px;
     color: rgb(41, 41, 41);
 }
 
-.login_menu a:hover {
+.findPw_menu a:hover {
     color: gray;
 }

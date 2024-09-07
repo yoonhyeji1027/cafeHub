@@ -1,0 +1,38 @@
+.community_header{
+    text-align: left;
+    margin: 50px 150px;
+}
+.community_header p{
+    font-size: 25px;
+    margin-top: -20px;
+}
+
+.commu_bt {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: white;
+    margin-top: 20px;
+  }
+  
+.myBoardBt{
+    background-color: gray;
+    color: white;
+    border: none;
+    border-radius: 10px 0 0 10px;
+    font-size: 17px;
+    height: 50px;
+    width: 150px;
+    margin: 20px 1px 10px 0;
+}
+.addBoardBt {
+    background-color: gray;
+    color: white;
+    border: none;
+    border-radius: 0 10px 10px 0;
+    font-size: 17px;
+    height: 50px;
+    width: 150px;
+    margin: 20px 0 10px 1px;
+  }
+  

@@ -1,23 +1,23 @@
-#login_title{
+#signUp_title{
     margin: 50px;
 }
-.login_header p {
+.signUp_header p {
     font-size: 20px;
 }
-.login_header hr {
+.signUp_header hr {
     width: 1000px;
     margin-top: 50px;
     margin-bottom: 100px;
     border-top: 1.5px solid rgb(197, 197, 197);
 }
 
-.login_input{
+.signUp_input{
     display:flex;
     flex-direction: column;
     align-items: center;
 }
 
-.userIdLogin, .userPasswordLogin{
+.userName, .userPhone, .userPassword, .userPassword_re{
     width: 400px;
     height: 50px;
     border: 1px solid gray;
@@ -25,15 +25,34 @@
     padding: 0 10px;
     margin-bottom: 10px;
 }
+.userId{
+    width: 300px;
+    height: 50px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+}
+#idCheck_bt{
+    width: 90px;
+    height: 50px;
+    background-color: rgb(160, 121, 75);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
 
-.login_bt{
+.signUp_bt{
     display:flex;
     flex-direction: column;
     align-items: center;
 }
 
-#loginBt{
-    background-color: rgb(160, 121, 75);
+#joinBt{
+    background-color: gray;
     color: white;
     border: none;
     border-radius: 10px;
@@ -43,27 +62,16 @@
     margin: 20px 0 10px 0;
 }
 
-#signUpBt{
-    background-color: gray;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 17px;
-    height: 50px;
-    width: 350px;
-    margin: 20px 0 20px 0;
-}
-
-#loginBt:hover, #signUpBt:hover {
+#joinBt:hover {
     background-color: #cccccc;
 }
 
-.login_menu a {
+.signUp_menu a {
     text-decoration: none;
     margin: 0 10px;
     color: rgb(41, 41, 41);
 }
 
-.login_menu a:hover {
+.signUp_menu a:hover {
     color: gray;
 }

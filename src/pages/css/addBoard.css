@@ -1,0 +1,24 @@
+#addBoard_title{
+    margin: 50px;
+}
+.addBoard_header hr {
+    width: 1000px;
+    margin-top: 50px;
+    margin-bottom: 100px;
+    border-top: 1.5px solid rgb(197, 197, 197);
+}
+
+.addBoard_menu{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.addBoard_menu h4{
+    width: 150px;
+    text-align: left;
+    font-size: 25px;
+}
+.addBoard_menu p{
+    text-align: left;
+    font-size: 28px;
+}
