@@ -1,0 +1,57 @@
+.coffee_header, .beans_header{
+    text-align: left;
+    margin: 50px 150px -30px 150px;
+}
+.coffee_header p{
+    font-size: 25px;
+    margin-top: -20px;
+}
+
+.coffee_info{
+    width: 1350px;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    padding: 20px 0;
+    margin-left: 150px;
+}
+
+.coffee_img{
+    width: 300px;
+    height: 200px;
+}
+.coffee_info p{
+    font-size: 20px;
+    margin-left: 50px;
+}
+
+.beans_info{
+    width: 1350px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    padding: 20px 0;
+    margin-left: 150px;
+}
+.beans_type{
+    display: flex;
+    flex-direction: row;
+}
+.beans_type h2{
+    width: 120px;
+}
+.beans_type h3{
+    font-size: 30px;
+    margin-top: 15px;
+    margin-right: 15px;
+}
+#beans_type_p{
+    font-size: 20px;
+    width: 1200px;
+}

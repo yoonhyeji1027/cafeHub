@@ -7,7 +7,7 @@ export default function Nav() {
         <div>
             <nav className="navbar">
                 <div className="navPage">
-                    <Link to="/main">
+                    <Link to="/main.js">
                         <img src="images/logo.png" alt="Logo" className="navMain" />
                     </Link>
                     <Link className="navMenu" to={'/community.js'}>커뮤니티</Link>

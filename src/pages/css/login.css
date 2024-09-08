@@ -33,7 +33,7 @@
 }
 
 #loginBt{
-    background-color: rgb(160, 121, 75);
+    background-color: #BA9672;
     color: white;
     border: none;
     border-radius: 10px;
@@ -44,7 +44,7 @@
 }
 
 #signUpBt{
-    background-color: gray;
+    background-color: #A6A6A6;
     color: white;
     border: none;
     border-radius: 10px;
