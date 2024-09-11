@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
-import "../css/matching.css";
+import "../css/group.css";
 import Nav from './nav.js';
+import Voc from "./voc.js";
 
-export default function Matching() {
-  
+export default function Group() {
     return(
         <div>
             <Nav />
@@ -17,7 +17,10 @@ export default function Matching() {
                 <button className='matchingCafeBt'>매칭</button>
                 </Link>
             </div>
+
+            <Voc />
         </div>
     );
+  
 }
 

@@ -26,3 +26,24 @@
     width: 150px;
     margin: 20px 0 10px 1px;
   }
+
+.container {
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px;
+  margin: 0 50px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  display: inline-block;
+  margin: 20px;
+  float: left;
+}
