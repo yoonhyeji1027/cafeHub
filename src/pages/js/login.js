@@ -1,13 +1,61 @@
-import { Link } from "react-router-dom";
-import React from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
 import "../css/login.css";
 import Nav from './nav.js';
+import { supabase } from '../../utils/SupabaseClient.ts';
 
 export default function Login() {
+    const navigate = useNavigate();
+    
+    const [loginInfo, setLoginInfo] = useState({
+        id: '',
+        password: '',
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setLoginInfo(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleLogin = async () => {
+        const { id, password } = loginInfo;
+
+        if (!id || !password) {
+            alert("아이디와 비밀번호를 입력해주세요.");
+            return;
+        }
+
+        try {
+            // 로그인 확인
+            const { data, error } = await supabase
+                .from('cafehub_user')
+                .select('*')
+                .eq('id', id)
+                .eq('password', password)
+                .single(); // 단일 결과를 가져오기
+
+            if (error) {
+                throw error;
+            }
+
+            if (data) {
+                alert('로그인 성공!');
+                navigate('/main.js');
+            } else {
+                alert('아이디 또는 비밀번호가 잘못되었습니다.');
+            }
+        } catch (error) {
+            console.error('로그인 오류:', error.message);
+            alert('아이디 또는 비밀번호가 잘못되었습니다.');
+        }
+    };
+
     return (
         <div>
             <Nav />
-
             <div className="login_header">
                 <h1 id='login_title'>로그인</h1>
                 <p>로그인하시면 커뮤니티/ 맞춤 매칭 등의 정보서비스를 이용하실 수 있습니다.</p>
@@ -15,11 +63,26 @@ export default function Login() {
             </div>
             <div>
                 <div className='login_input'>
-                    <input type="text" className='userIdLogin' placeholder='아이디' autoFocus></input>
-                    <input type="password" className='userPasswordLogin' placeholder='비밀번호'></input>
+                    <input
+                        type="text"
+                        className='userIdLogin'
+                        name="id"
+                        placeholder='아이디'
+                        autoFocus
+                        value={loginInfo.id}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="password"
+                        className='userPasswordLogin'
+                        name="password"
+                        placeholder='비밀번호'
+                        value={loginInfo.password}
+                        onChange={handleChange}
+                    />
                 </div>
                 <div className='login_bt'>
-                    <button id="loginBt">로그인</button>
+                    <button id="loginBt" onClick={handleLogin}>로그인</button>
                     <Link to="/signUp.js">
                         <button id="signUpBt">회원가입</button>
                     </Link>
@@ -31,6 +94,4 @@ export default function Login() {
             </div>
         </div>
     );
-
 }
-

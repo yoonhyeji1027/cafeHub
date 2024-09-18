@@ -1,30 +1,173 @@
-import { Link } from "react-router-dom";
-import React from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
 import "../css/signUp.css";
 import Nav from './nav.js';
+import { supabase } from '../../utils/SupabaseClient.ts';
 
-export default function signUp() {
+export default function SignUp() {
+
+    const navigate = useNavigate();
+
+    const [userInfo, setUserInfo] = useState({
+        name: '',
+        id: '',
+        password: '',
+        phone_number: '',
+    });
+
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setUserInfo(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setConfirmPassword(e.target.value);
+    };
+
+    const checkIdDuplicate = async (id: string) => {
+        try {
+            const { data, error } = await supabase
+                .from('cafehub_user')
+                .select('id')
+                .eq('id', id);
+
+            if (error) throw error;
+
+            return data.length > 0;
+        } catch (error) {
+            console.error('ID 중복 확인 오류:', error.message);
+            return false;
+        }
+    };
+
+    const handleIdCheck = async () => {
+        const { id } = userInfo;
+
+        if (!id) {
+            alert("아이디를 입력해주세요.");
+            return;
+        }
+
+        const isDuplicate = await checkIdDuplicate(id);
+
+        if (isDuplicate) {
+            alert("이미 사용 중인 아이디입니다.");
+        } else {
+            alert("사용 가능한 아이디입니다.");
+        }
+    };
+
+    const checkPhoneNumberDuplicate = async (phone_number: string) => {
+        try {
+            const { data, error } = await supabase
+                .from('cafehub_user')
+                .select('phone_number')
+                .eq('phone_number', phone_number);
+
+            if (error) throw error;
+
+            return data.length > 0;
+        } catch (error) {
+            console.error('전화번호 중복 확인 오류:', error.message);
+            return false;
+        }
+    };
+
+    const handleSubmit = async () => {
+        const { name, id, password, phone_number } = userInfo;
+
+        if (!name || !id || !password || !phone_number || !confirmPassword) {
+            alert("모든 필드를 입력해주세요.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
+        const isPhoneNumberDuplicate = await checkPhoneNumberDuplicate(phone_number);
+
+        if (isPhoneNumberDuplicate) {
+            alert("이미 가입된 전화번호입니다.");
+            return;
+        }
+
+        try {
+            const { data, error } = await supabase
+                .from('cafehub_user')
+                .insert([{ name, id, password, phone_number }]);
+
+            if (error) throw error;
+
+            alert('회원가입이 완료되었습니다.');
+            navigate('/login.js');
+        } catch (error) {
+            console.error('회원가입 오류:', error.message);
+            alert('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
+        }
+    };
+
     return (
         <div>
             <Nav />
-
             <div className="signUp_header">
                 <h1 id='signUp_title'>회원가입</h1>
                 <hr />
             </div>
             <div>
                 <div className='signUp_input'>
-                    <input type="text" className='userName' placeholder='이름' autoFocus></input>
-                    <input type="phonenumber" className='userPhone' placeholder='전화번호'></input>
+                    <input
+                        type="text"
+                        className='userName'
+                        name="name"
+                        placeholder='이름'
+                        autoFocus
+                        value={userInfo.name}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="text"
+                        className='userPhone'
+                        name="phone_number"
+                        placeholder='전화번호'
+                        value={userInfo.phone_number}
+                        onChange={handleChange}
+                    />
                     <div className="idCheck">
-                    <input type="text" className='userId' placeholder='아이디'></input>
-                    <button id="idCheck_bt">확인</button>
+                        <input
+                            type="text"
+                            className='userId'
+                            name="id"
+                            placeholder='아이디'
+                            value={userInfo.id}
+                            onChange={handleChange}
+                        />
+                        <button id="idCheck_bt" onClick={handleIdCheck}>확인</button>
                     </div>
-                    <input type="password" className='userPassword' placeholder='비밀번호'></input>
-                    <input type="password" className='userPassword_re' placeholder='비밀번호 확인'></input>
+                    <input
+                        type="password"
+                        className='userPassword'
+                        name="password"
+                        placeholder='비밀번호'
+                        value={userInfo.password}
+                        onChange={handleChange}
+                    />
+                    <input
+                        type="password"
+                        className='userPassword_re'
+                        placeholder='비밀번호 확인'
+                        value={confirmPassword}
+                        onChange={handleConfirmPasswordChange}
+                    />
                 </div>
                 <div className='signUp_bt'>
-                    <button id="joinBt">가입</button>
+                    <button id="joinBt" onClick={handleSubmit}>가입</button>
                 </div>
                 <div className='signUp_menu'>
                     <Link to="/findId.js">아이디 찾기</Link>
@@ -33,6 +176,4 @@ export default function signUp() {
             </div>
         </div>
     );
-
 }
-
