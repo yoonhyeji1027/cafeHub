@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../css/login.css";
 import Nav from './nav.js';
 import { supabase } from '../../utils/SupabaseClient.ts';
@@ -11,6 +11,14 @@ export default function Login() {
         id: '',
         password: '',
     });
+
+    // 페이지 로드 시 세션 확인
+    useEffect(() => {
+        const savedSession = localStorage.getItem('session');
+        if (savedSession) {
+            navigate('/main.js'); // 로그인된 상태라면 메인 페이지로 이동
+        }
+    }, [navigate]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -29,21 +37,21 @@ export default function Login() {
         }
 
         try {
-            // 로그인 확인
+            // Supabase에서 id와 password 확인
             const { data, error } = await supabase
-                .from('cafehub_user')
+                .from('cafehub_user') // 사용자 테이블
                 .select('*')
                 .eq('id', id)
                 .eq('password', password)
-                .single(); // 단일 결과를 가져오기
+                .single();
 
             if (error) {
                 throw error;
             }
 
             if (data) {
-                alert('로그인 성공!');
-                navigate('/main.js');
+                localStorage.setItem('session', JSON.stringify(data)); // 로그인 성공 시 세션 저장
+                navigate('/main.js'); // 메인 페이지로 이동
             } else {
                 alert('아이디 또는 비밀번호가 잘못되었습니다.');
             }

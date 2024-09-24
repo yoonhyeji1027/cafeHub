@@ -78,16 +78,36 @@ export default function SignUp() {
         }
     };
 
+    const validateInput = () => {
+        const { name, id, password, phone_number } = userInfo;
+
+        if (name.length < 2 || /\s/.test(name)) {
+            alert("이름은 공백 없이 2자 이상이어야 합니다.");
+            return false;
+        }
+        if (phone_number.length < 9 || /\s/.test(phone_number)) {
+            alert("전화번호는 공백 없이 9자 이상이어야 합니다.");
+            return false;
+        }
+        if (id.length < 3 || /\s/.test(id)) {
+            alert("아이디는 공백 없이 3자 이상이어야 합니다.");
+            return false;
+        }
+        if (password.length < 6 || /\s/.test(password)) {
+            alert("비밀번호는 공백 없이 6자 이상이어야 합니다.");
+            return false;
+        }
+        if (password !== confirmPassword) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return false;
+        }
+        return true;
+    };
+
     const handleSubmit = async () => {
         const { name, id, password, phone_number } = userInfo;
 
-        if (!name || !id || !password || !phone_number || !confirmPassword) {
-            alert("모든 필드를 입력해주세요.");
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            alert("비밀번호가 일치하지 않습니다.");
+        if (!validateInput()) {
             return;
         }
 

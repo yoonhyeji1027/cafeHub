@@ -1,11 +1,21 @@
 import { Link } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "../css/matchingCafe.css";
 import Nav from './nav.js';
 import { Container, Row } from 'react-bootstrap';
 import Card from './card.js';
+import Nav_login from './nav_login.js';
 
 export default function MatchingCafe() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    // 페이지 로드 시 세션 확인
+    useEffect(() => {
+        const session = localStorage.getItem('session');
+        if (session) {
+            setIsLoggedIn(true); // 세션이 존재하면 로그인 상태로 설정
+        }
+    }, []);
     const [cafes] = useState([
         {
             id: 0,
@@ -41,7 +51,7 @@ export default function MatchingCafe() {
 
     return (
         <div>
-            <Nav />
+            {isLoggedIn ? <Nav_login /> : <Nav />}
 
             <div className="matching_bt">
                 <Link to="/group.js">
