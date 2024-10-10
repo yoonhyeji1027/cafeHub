@@ -10,7 +10,7 @@ export default function SignUp() {
 
     const [userInfo, setUserInfo] = useState({
         name: '',
-        id: '',
+        user_id: '',
         password: '',
         phone_number: '',
     });
@@ -29,12 +29,12 @@ export default function SignUp() {
         setConfirmPassword(e.target.value);
     };
 
-    const checkIdDuplicate = async (id: string) => {
+    const checkIdDuplicate = async (user_id: string) => {
         try {
             const { data, error } = await supabase
                 .from('cafehub_user')
-                .select('id')
-                .eq('id', id);
+                .select('user_id')
+                .eq('user_id', user_id);
 
             if (error) throw error;
 
@@ -46,14 +46,14 @@ export default function SignUp() {
     };
 
     const handleIdCheck = async () => {
-        const { id } = userInfo;
+        const { user_id } = userInfo;
 
-        if (!id) {
+        if (!user_id) {
             alert("아이디를 입력해주세요.");
             return;
         }
 
-        const isDuplicate = await checkIdDuplicate(id);
+        const isDuplicate = await checkIdDuplicate(user_id);
 
         if (isDuplicate) {
             alert("이미 사용 중인 아이디입니다.");
@@ -79,7 +79,7 @@ export default function SignUp() {
     };
 
     const validateInput = () => {
-        const { name, id, password, phone_number } = userInfo;
+        const { name, user_id, password, phone_number } = userInfo;
 
         if (name.length < 2 || /\s/.test(name)) {
             alert("이름은 공백 없이 2자 이상이어야 합니다.");
@@ -89,7 +89,7 @@ export default function SignUp() {
             alert("전화번호는 공백 없이 9자 이상이어야 합니다.");
             return false;
         }
-        if (id.length < 3 || /\s/.test(id)) {
+        if (user_id.length < 3 || /\s/.test(user_id)) {
             alert("아이디는 공백 없이 3자 이상이어야 합니다.");
             return false;
         }
@@ -105,7 +105,7 @@ export default function SignUp() {
     };
 
     const handleSubmit = async () => {
-        const { name, id, password, phone_number } = userInfo;
+        const { name, user_id, password, phone_number } = userInfo;
 
         if (!validateInput()) {
             return;
@@ -121,7 +121,7 @@ export default function SignUp() {
         try {
             const { data, error } = await supabase
                 .from('cafehub_user')
-                .insert([{ name, id, password, phone_number }]);
+                .insert([{ name, user_id, password, phone_number }]);
 
             if (error) throw error;
 
@@ -163,7 +163,7 @@ export default function SignUp() {
                         <input
                             type="text"
                             className='userId'
-                            name="id"
+                            name="user_id"
                             placeholder='아이디'
                             value={userInfo.id}
                             onChange={handleChange}

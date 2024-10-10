@@ -8,7 +8,7 @@ export default function Login() {
     const navigate = useNavigate();
     
     const [loginInfo, setLoginInfo] = useState({
-        id: '',
+        user_id: '',
         password: '',
     });
 
@@ -29,9 +29,9 @@ export default function Login() {
     };
 
     const handleLogin = async () => {
-        const { id, password } = loginInfo;
+        const { user_id, password } = loginInfo;
 
-        if (!id || !password) {
+        if (!user_id || !password) {
             alert("아이디와 비밀번호를 입력해주세요.");
             return;
         }
@@ -41,7 +41,7 @@ export default function Login() {
             const { data, error } = await supabase
                 .from('cafehub_user') // 사용자 테이블
                 .select('*')
-                .eq('id', id)
+                .eq('user_id', user_id)
                 .eq('password', password)
                 .single();
 
@@ -74,10 +74,10 @@ export default function Login() {
                     <input
                         type="text"
                         className='userIdLogin'
-                        name="id"
+                        name="user_id"
                         placeholder='아이디'
                         autoFocus
-                        value={loginInfo.id}
+                        value={loginInfo.user_id}
                         onChange={handleChange}
                     />
                     <input
