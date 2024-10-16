@@ -8,7 +8,7 @@ export default function Community() {
     const [posts, setPosts] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(5); // 한 페이지에 표시할 포스트 수
+    const [postsPerPage] = useState(5);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,36 +50,47 @@ export default function Community() {
                 <h1>Café Hub</h1>
                 <p>in 강릉</p>
             </div>
+            <div className='commu_bt'>
+                <Link to="/myBoard.js">
+                    <button className='myBoardBt'>내가 쓴 글</button>
+                </Link>
+                <Link to="/addBoard.js">
+                    <button className='addBoardBt'>글 쓰기</button>
+                </Link>
+            </div>
             <div className="posts">
                 {currentPosts.map((post) => (
-                    <div key={post.id} className="post_card">
-                        <div className="post_header">
-                            <div className="post_user_info">
-                                <span className="username">{post.name || "익명"}</span> {/* 수정된 부분 */}
-                                <span className="post_date">
-                                    {new Date(post.created_at).toLocaleString('ko-KR', {
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                        hour: '2-digit',
-                                        minute: '2-digit',
-                                        hour12: false // 24시간 형식
-                                    })}
-                                </span>
+                    <Link to="/postDetail.js">
+                        <div key={post.id} className="post_card">
+                            <div className="post_header">
+                                <div className="post_user_info">
+                                    <span className="username">{post.name || "익명"}</span>
+                                    <span className="post_date">
+                                        {new Date(post.created_at).toLocaleString('ko-KR', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            hour12: false 
+                                        })}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="post_content">
+                                <h3>{post.title}</h3>
+                                <p>{post.content}</p>
+                                {post.picture && (
+                                    <img
+                                        src={post.picture}
+                                        alt="Post"
+                                        className="post_image"
+                                    />
+                                )}
                             </div>
                         </div>
-                        <div className="post_content">
-                            <h3>{post.title}</h3>
-                            <p>{post.content}</p>
-                            {post.picture && (
-                                <img
-                                    src={post.picture}
-                                    alt="Post"
-                                    className="post_image"
-                                />
-                            )}
-                        </div>
-                    </div>
+                    </Link>
+
                 ))}
             </div>
 
@@ -90,14 +101,6 @@ export default function Community() {
                 currentPage={currentPage}
             />
 
-            <div className='commu_bt'>
-                <Link to="/myBoard.js">
-                    <button className='myBoardBt'>내가 쓴 글</button>
-                </Link>
-                <Link to="/addBoard.js">
-                    <button className='addBoardBt'>글 쓰기</button>
-                </Link>
-            </div>
         </div>
     );
 }

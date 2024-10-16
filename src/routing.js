@@ -13,6 +13,7 @@ import AddBoard from "./pages/js/addBoard.js";
 import MyBoard from "./pages/js/myBoard.js";
 import Group from "./pages/js/group.js";
 import MatchingCafe from "./pages/js/matchingCafe.js";
+import PostDetail from "./pages/js/postDetail.js";
 
 
 
@@ -36,6 +37,7 @@ function Routing() {
             <Route path='/addBoard.js' element={<AddBoard />} />
             <Route path='/group.js' element={<Group />} />
             <Route path='/matchingCafe.js' element={<MatchingCafe />} />
+            <Route path='/postDetail.js' element={<PostDetail />} />
 
         </Routes>
       </BrowserRouter>

@@ -9,6 +9,8 @@ export default function MyBoard() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(5);
+    const [selectedPosts, setSelectedPosts] = useState([]);
+    const [isDeleteMode, setIsDeleteMode] = useState(false);
     const navigate = useNavigate();
     const userId = localStorage.getItem('user_id');
 
@@ -38,20 +40,35 @@ export default function MyBoard() {
         }
     };
 
-    const deletePost = async (postId) => {
-        const confirmDelete = window.confirm("정말로 이 글을 삭제하시겠습니까?");
+    const handleCheckboxChange = (postId) => {
+        if (selectedPosts.includes(postId)) {
+            setSelectedPosts(selectedPosts.filter(id => id !== postId));
+        } else {
+            setSelectedPosts([...selectedPosts, postId]);
+        }
+    };
+
+    const toggleDeleteMode = () => {
+        setIsDeleteMode(!isDeleteMode);
+        setSelectedPosts([]); // 삭제 모드를 변경할 때 선택된 게시글 초기화
+    };
+
+    const deleteSelectedPosts = async () => {
+        const confirmDelete = window.confirm("정말로 선택한 글들을 삭제하시겠습니까?");
         if (!confirmDelete) return;
 
         const { error } = await supabase
             .from('posts')
             .delete()
-            .eq('id', postId);
+            .in('id', selectedPosts);
+            navigate('/community.js');
 
         if (error) {
-            console.error("Error deleting post:", error);
+            console.error("Error deleting posts:", error);
         } else {
-            // 삭제 후, 목록을 업데이트하여 삭제된 게시물이 보이지 않도록 함
-            setPosts(posts.filter(post => post.id !== postId));
+            setPosts(posts.filter(post => !selectedPosts.includes(post.id)));
+            setSelectedPosts([]);
+            setIsDeleteMode(false);
         }
     };
 
@@ -69,10 +86,33 @@ export default function MyBoard() {
                 <h1>Café Hub</h1>
                 <p>in 강릉</p>
             </div>
+            <div className='commu_bt'>
+                <Link to="/community.js">
+                    <button className='myBoardBt'>커뮤니티</button>
+                </Link>
+                <Link to="/addBoard.js">
+                    <button className='addBoardBt'>글 쓰기</button>
+                </Link>
+            </div>
+            <button
+                className='delete_button'
+                onClick={isDeleteMode ? deleteSelectedPosts : toggleDeleteMode}
+            >
+                {isDeleteMode ? '선택한 글 삭제' : '게시글 삭제'}
+            </button>
+            
             <div className="posts">
                 {currentPosts.map((post) => (
+                    <Link to="/postDetail.js">
                     <div key={post.id} className="post_card">
                         <div className="post_header">
+                            {isDeleteMode && (
+                                <input
+                                    type="checkbox"
+                                    checked={selectedPosts.includes(post.id)}
+                                    onChange={() => handleCheckboxChange(post.id)}
+                                />
+                            )}
                             <div className="post_user_info">
                                 <span className="username">{post.name || "익명"}</span>
                                 <span className="post_date">
@@ -86,12 +126,6 @@ export default function MyBoard() {
                                     })}
                                 </span>
                             </div>
-                            <button
-                                className="delete_button"
-                                onClick={() => deletePost(post.id)}
-                            >
-                                삭제
-                            </button>
                         </div>
                         <div className="post_content">
                             <h3>{post.title}</h3>
@@ -105,8 +139,10 @@ export default function MyBoard() {
                             )}
                         </div>
                     </div>
+                    </Link>
                 ))}
             </div>
+
 
             <Pagination
                 postsPerPage={postsPerPage}
@@ -114,15 +150,6 @@ export default function MyBoard() {
                 paginate={paginate}
                 currentPage={currentPage}
             />
-
-            <div className='commu_bt'>
-            <Link to="/community.js">
-                    <button className='myBoardBt'>커뮤니티</button>
-                </Link>
-                <Link to="/addBoard.js">
-                    <button className='addBoardBt'>글 쓰기</button>
-                </Link>
-            </div>
         </div>
     );
 }
