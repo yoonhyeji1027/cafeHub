@@ -95,7 +95,7 @@ export default function MyBoard() {
                 </Link>
             </div>
             <button
-                className='delete_button'
+                className='myBoard_delete_button'
                 onClick={isDeleteMode ? deleteSelectedPosts : toggleDeleteMode}
             >
                 {isDeleteMode ? '선택한 글 삭제' : '게시글 삭제'}
@@ -103,7 +103,19 @@ export default function MyBoard() {
             
             <div className="posts">
                 {currentPosts.map((post) => (
-                    <Link to="/postDetail.js">
+                    <Link 
+                    to="/postDetail.js"
+                    state={{ 
+                        postId: post.id, 
+                        title: post.title, 
+                        picture: post.picture, 
+                        content: post.content, 
+                        userId: post.user_id, 
+                        createdAt: post.created_at, 
+                        name: post.name, 
+                        number: post.number
+                    }}
+                >
                     <div key={post.id} className="post_card">
                         <div className="post_header">
                             {isDeleteMode && (
@@ -129,7 +141,7 @@ export default function MyBoard() {
                         </div>
                         <div className="post_content">
                             <h3>{post.title}</h3>
-                            <p>{post.content}</p>
+                            <p>{post.content.replace(/\\n/g, '\n')}</p>
                             {post.picture && (
                                 <img
                                     src={post.picture}

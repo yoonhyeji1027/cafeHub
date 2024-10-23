@@ -60,7 +60,19 @@ export default function Community() {
             </div>
             <div className="posts">
                 {currentPosts.map((post) => (
-                    <Link to="/postDetail.js">
+                    <Link 
+                        to="/postDetail.js"
+                        state={{ 
+                            postId: post.id, 
+                            title: post.title, 
+                            picture: post.picture, 
+                            content: post.content, 
+                            userId: post.user_id, 
+                            createdAt: post.created_at, 
+                            name: post.name, 
+                            number: post.number
+                        }}
+                    >
                         <div key={post.id} className="post_card">
                             <div className="post_header">
                                 <div className="post_user_info">
@@ -79,7 +91,7 @@ export default function Community() {
                             </div>
                             <div className="post_content">
                                 <h3>{post.title}</h3>
-                                <p>{post.content}</p>
+                                <p>{post.content.replace(/\\n/g, '\n')}</p>
                                 {post.picture && (
                                     <img
                                         src={post.picture}
@@ -90,7 +102,6 @@ export default function Community() {
                             </div>
                         </div>
                     </Link>
-
                 ))}
             </div>
 

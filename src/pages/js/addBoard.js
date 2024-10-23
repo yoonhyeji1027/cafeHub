@@ -8,7 +8,7 @@ export default function AddBoard() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [title, setTitle] = useState('');
     const [picture, setPicture] = useState(null); // 파일 업로드를 위한 상태
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(''); // 게시글 내용
     const [userName, setUserName] = useState(''); // 사용자의 이름을 저장할 상태
     const navigate = useNavigate();
 
@@ -94,7 +94,7 @@ export default function AddBoard() {
             const imageUrl = await uploadImage(); // 이미지 업로드 후 URL 가져오기
 
             const { error } = await supabase.from('posts').insert([
-                { title, picture: imageUrl, content, user_id, name: userName } // 사용자 이름 추가
+                { title, picture: imageUrl, content: content.replace(/\n/g, '\\n'), user_id, name: userName } // 줄바꿈 포함
             ]);
 
             if (error) throw new Error(error.message);

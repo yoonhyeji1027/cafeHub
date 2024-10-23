@@ -84,6 +84,13 @@
 
 .post_content {
     margin-top: 10px;
+    text-align: left;
+    color: #333;
+    display: -webkit-box; /* Flexbox를 사용하기 위한 설정 */
+    -webkit-box-orient: vertical; /* 수직 방향으로 정렬 */
+    -webkit-line-clamp: 3; /* 2줄로 제한 */
+    overflow: hidden; /* 넘치는 내용을 숨김 */
+    text-overflow: ellipsis; /* 생략 부호(...) 추가 */
 }
 
 .post_content h3 {
