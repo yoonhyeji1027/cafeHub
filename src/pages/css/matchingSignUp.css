@@ -1,0 +1,19 @@
+.cafe-title h1 {
+    font-size: 1.2em;
+
+
+    text-align: center;
+}
+
+.cafe-image img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.cafe-address p {
+    font-size: 1.2em;
+    text-align: center;
+}

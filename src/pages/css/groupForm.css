@@ -1,0 +1,109 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.group-form-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.groupForm_list {
+    margin-bottom: 15px;
+}
+
+.groupForm_list label {
+    display: block;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.groupForm_list input[type="text"],
+.groupForm_list input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.groupCreationDate {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.groupForm_list input::placeholder {
+    color: #aaa;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #ccc;;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #A6A6A6;
+}
+
+
+.groupForm_bt {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: white;
+    margin-top: 20px;
+    width: 500px;
+  }
+  
+.cancelBt{
+    background-color: #D9D9D9;
+    color: white;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    font-size: 17px;
+    height: 50px;
+    width: 254px;
+    margin: 20px 1px 10px 0;
+}
+.applicationBt {
+    background-color: #D9D9D9;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    font-size: 17px;
+    height: 50px;
+    width: 254px;
+    margin: 20px 0px 10px 1px;
+  }
+  .cancelBt:hover, .applicationBt:hover {
+    background-color: #A6A6A6;
+}

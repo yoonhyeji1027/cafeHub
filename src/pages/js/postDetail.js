@@ -6,27 +6,57 @@ import { supabase } from '../../utils/SupabaseClient.ts';
 
 export default function PostDetail() {
     const location = useLocation();
-    const { title, picture, content, userId, createdAt, name, number } = location.state || {}; 
+    const { title, picture, content, userId, createdAt, name, number } = location.state || {};
     const [likes, setLikes] = useState(0);
+    const [hasLiked, setHasLiked] = useState(false);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [currentUserName, setCurrentUserName] = useState('');
-    
+    const [currentUserId, setCurrentUserId] = useState('');
+
     useEffect(() => {
-        // 로그인된 유저의 이름을 로컬 스토리지 또는 세션에서 불러옴
         const session = JSON.parse(localStorage.getItem('session'));
         if (session && session.user) {
-            setCurrentUserName(session.user.name); // 세션에서 유저 이름 추출
+            setCurrentUserName(session.user.name);
+            setCurrentUserId(session.user.user_id);
         }
-        fetchComments(); // 댓글 가져오기
+        fetchPostData();    // 게시글 정보 및 좋아요 상태 불러오기
+        fetchComments();    // 댓글 가져오기
     }, [number]);
+
+    // 게시글 정보와 좋아요 상태 불러오기
+    const fetchPostData = async () => {
+        try {
+            // 게시글의 likes 필드를 가져옴
+            const { data: postData, error: postError } = await supabase
+                .from('posts')
+                .select('likes')
+                .eq('number', number)
+                .single();
+
+            if (postError) throw postError;
+
+            setLikes(postData.likes);
+
+            // 로컬 스토리지에서 유저가 이 게시글에 좋아요를 눌렀는지 확인
+            const likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || {};
+            if (likedPosts[number]) {
+                setHasLiked(true); // 이미 좋아요를 눌렀다면 true로 설정
+            } else {
+                setHasLiked(false); // 좋아요를 누르지 않았으면 false로 설정
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     // 댓글 가져오기 함수
     const fetchComments = async () => {
         const { data, error } = await supabase
-            .from('comments') // comments 테이블에서 댓글 가져오기
+            .from('comments')
             .select('*')
-            .eq('post_number', number); // 게시물 번호로 필터링
+            .eq('post_number', number);
 
         if (error) {
             console.error(error);
@@ -35,36 +65,64 @@ export default function PostDetail() {
         }
     };
 
+    // 좋아요 클릭 핸들러
+    const handleLike = async () => {
+        try {
+            const likedPosts = JSON.parse(localStorage.getItem('likedPosts')) || {};
 
-    const handleLike = () => {
-        setLikes(likes + 1);
+            if (hasLiked) {
+                // 좋아요 취소
+                const newLikes = likes - 1;
+                setLikes(newLikes);
+                setHasLiked(false);
+                delete likedPosts[number];  // 로컬 스토리지에서 삭제
+                localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+
+                // posts 테이블의 좋아요 수 업데이트
+                const { error: postError } = await supabase
+                    .from('posts')
+                    .update({ likes: newLikes })
+                    .eq('number', number);
+
+                if (postError) throw postError;
+
+            } else {
+                // 좋아요 추가
+                const newLikes = likes + 1;
+                setLikes(newLikes);
+                setHasLiked(true);
+                likedPosts[number] = true;  // 로컬 스토리지에 추가
+                localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
+
+                // posts 테이블의 좋아요 수 업데이트
+                const { error: postError } = await supabase
+                    .from('posts')
+                    .update({ likes: newLikes })
+                    .eq('number', number);
+
+                if (postError) throw postError;
+            }
+        } catch (error) {
+            console.error(error);
+        }
     };
 
+    // 댓글 작성 핸들러
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
         if (newComment.trim()) {
             const newCommentData = {
                 name: currentUserName,
                 content: newComment,
-                date: new Date().toLocaleString('ko-KR', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false
-                }), post_number: number
+                date: new Date().toISOString(),
+                post_number: number
             };
-            setComments([...comments, newCommentData]); // 댓글 리스트 업데이트
-            setNewComment(''); // 댓글 입력란 초기화
+            setComments([...comments, newCommentData]);
+            setNewComment('');
 
-            // Supabase에 댓글 추가
             const { error } = await supabase.from('comments').insert([newCommentData]);
             if (error) {
                 console.error(error);
-            } else {
-                setComments([...comments, newCommentData]); // 댓글 리스트 업데이트
-                setNewComment(''); // 댓글 입력란 초기화
             }
         }
     };
@@ -88,10 +146,6 @@ export default function PostDetail() {
                             })}
                         </span>
                     </div>
-                    <div className="post_actions">
-                        <button className="edit_button">수정</button>
-                        <button className="delete_button">삭제</button>
-                    </div>
                 </div>
 
                 <div className="post_content">
@@ -101,7 +155,7 @@ export default function PostDetail() {
 
                 <div className="post_interaction">
                     <button onClick={handleLike} className="like_button">
-                        좋아요 {likes}
+                        {hasLiked ? '좋아요 취소' : '좋아요'} {likes}
                     </button>
                 </div>
 

@@ -1,20 +1,25 @@
 import React from 'react';
-import "../css/matchingCafe.css";
+import { useNavigate } from 'react-router-dom';
+import "../css/matchingCafe.css"; 
 
-function Card(props) {
-  const { cafes } = props;
+const Card = ({ cafes }) => {
+    const navigate = useNavigate(); 
 
-  if (!cafes) {
-    return <div>Loading...</div>;
-  }
+    const title = cafes?.title || '제목 없음';
+    const imageUrl = cafes?.image_url || 'default_image_url.jpg'; 
+    const address = cafes?.address || '주소 정보 없음';
 
-  return (
-    <div className="card">
-      <img src="images/coffee_info.png" width="300px" alt="Coffee" />
-      <h4>{cafes.title}</h4>
-      <p>{cafes.location.toLocaleString()}</p>
-    </div>
-  );
-}
+    const handleClick = () => {
+        navigate('/matchingSignUp', { state: { cafe: cafes } });  // navigate로 state를 전달
+    };
+
+    return (
+        <div className="card" onClick={handleClick}> 
+            <h3 className="title">{title}</h3>
+            <img src={imageUrl} alt={title} className="cafe-image" />
+            <p className="address">{address}</p>
+        </div>
+    );
+};
 
 export default Card;

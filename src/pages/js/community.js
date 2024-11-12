@@ -8,7 +8,7 @@ export default function Community() {
     const [posts, setPosts] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(5);
+    const [postsPerPage] = useState(10);
     const navigate = useNavigate();
 
     useEffect(() => {

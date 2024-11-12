@@ -1,47 +1,54 @@
-.community_header{
+.community_header {
     text-align: left;
     margin: 50px 150px;
 }
-.community_header p{
+.community_header p {
     font-size: 25px;
     margin-top: -20px;
 }
 
 .commu_bt {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column; /* 세로 정렬 */
+    position: fixed; /* 스크롤 시 고정 */
+    top: 100px; /* 페이지 상단에서의 위치 */
+    right: 50px; /* 오른쪽 여백 */
     color: white;
-    margin-top: 20px;
-  }
-  
-.myBoardBt{
+    gap: 5px; /* 버튼 간격 */
+}
+
+.myBoardBt {
     background-color: #D9D9D9;
     color: white;
     border: none;
-    border-radius: 10px 0 0 10px;
-    font-size: 17px;
-    height: 50px;
-    width: 150px;
-    margin: 20px 1px 10px 0;
+    font-size: 20px;
+    height: 150px;
+    width: 50px;
+    border-radius: 10px;
+    margin: 0;
+    transition: background-color 0.3s;
+    border-radius: 10px 0 0 0;
 }
 .addBoardBt {
     background-color: #D9D9D9;
     color: white;
     border: none;
-    border-radius: 0 10px 10px 0;
-    font-size: 17px;
-    height: 50px;
-    width: 150px;
-    margin: 20px 0 10px 1px;
-  }
- .addBoardBt:hover, .myBoardBt:hover {
+    font-size: 20px;
+    height: 150px;
+    width: 50px;
+    border-radius: 10px;
+    margin: 0;
+    transition: background-color 0.3s;
+    border-radius: 0 0 0 10px;
+}
+
+.addBoardBt:hover, .myBoardBt:hover {
     background-color: #BA9672;
 }
 
 .posts {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 3열 레이아웃 */
     gap: 20px;
     padding: 20px 150px;
 }

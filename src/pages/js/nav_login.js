@@ -30,7 +30,7 @@ export default function Nav_login() {
                         <img src="images/logo.png" alt="Logo" className="navMain" />
                     </Link>
                     <Link className="navMenu" to={'/community.js'}>커뮤니티</Link>
-                    <Link className="navMenu" to={'/matching.js'}>매칭</Link>
+                    <Link className="navMenu" to={'/group.js'}>매칭</Link>
                     <Link className="navMenu" to={'/coffee.js'}>커피정보</Link>
                     <Link className="navMenu" to={'/login.js'} onClick={handleLogout}>로그아웃</Link>
                 </div>

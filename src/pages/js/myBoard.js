@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../utils/SupabaseClient.ts';
 import "../css/myBoard.css";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Nav_login from './nav_login.js';
 
 export default function MyBoard() {
     const [posts, setPosts] = useState([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(5);
-    const [selectedPosts, setSelectedPosts] = useState([]);
-    const [isDeleteMode, setIsDeleteMode] = useState(false);
+    const [postsPerPage] = useState(10);
+    const [selectedPosts, setSelectedPosts] = useState({}); // 선택된 게시글 ID를 객체로 관리
     const navigate = useNavigate();
     const userId = localStorage.getItem('user_id');
 
@@ -41,34 +40,29 @@ export default function MyBoard() {
     };
 
     const handleCheckboxChange = (postId) => {
-        if (selectedPosts.includes(postId)) {
-            setSelectedPosts(selectedPosts.filter(id => id !== postId));
-        } else {
-            setSelectedPosts([...selectedPosts, postId]);
-        }
-    };
-
-    const toggleDeleteMode = () => {
-        setIsDeleteMode(!isDeleteMode);
-        setSelectedPosts([]); // 삭제 모드를 변경할 때 선택된 게시글 초기화
+        setSelectedPosts((prevSelectedPosts) => ({
+            ...prevSelectedPosts,
+            [postId]: !prevSelectedPosts[postId], // 클릭한 체크박스만 상태 반전
+        }));
     };
 
     const deleteSelectedPosts = async () => {
         const confirmDelete = window.confirm("정말로 선택한 글들을 삭제하시겠습니까?");
         if (!confirmDelete) return;
 
+        const postIdsToDelete = Object.keys(selectedPosts).filter(postId => selectedPosts[postId]);
         const { error } = await supabase
             .from('posts')
             .delete()
-            .in('id', selectedPosts);
-            navigate('/community.js');
+            .in('id', postIdsToDelete);
+
+        navigate('/community.js');
 
         if (error) {
             console.error("Error deleting posts:", error);
         } else {
-            setPosts(posts.filter(post => !selectedPosts.includes(post.id)));
-            setSelectedPosts([]);
-            setIsDeleteMode(false);
+            setPosts(posts.filter(post => !postIdsToDelete.includes(post.id)));
+            setSelectedPosts({}); // 삭제 후 선택 상태 초기화
         }
     };
 
@@ -87,44 +81,42 @@ export default function MyBoard() {
                 <p>in 강릉</p>
             </div>
             <div className='commu_bt'>
-                <Link to="/community.js">
-                    <button className='myBoardBt'>커뮤니티</button>
-                </Link>
-                <Link to="/addBoard.js">
-                    <button className='addBoardBt'>글 쓰기</button>
-                </Link>
+                <button onClick={() => navigate("/community.js")} className='myBoardBt'>커뮤니티</button>
+                <button onClick={() => navigate("/addBoard.js")} className='addBoardBt'>글 쓰기</button>
             </div>
+            
             <button
                 className='myBoard_delete_button'
-                onClick={isDeleteMode ? deleteSelectedPosts : toggleDeleteMode}
+                onClick={deleteSelectedPosts}
             >
-                {isDeleteMode ? '선택한 글 삭제' : '게시글 삭제'}
+                선택한 글 삭제
             </button>
             
             <div className="posts">
                 {currentPosts.map((post) => (
-                    <Link 
-                    to="/postDetail.js"
-                    state={{ 
-                        postId: post.id, 
-                        title: post.title, 
-                        picture: post.picture, 
-                        content: post.content, 
-                        userId: post.user_id, 
-                        createdAt: post.created_at, 
-                        name: post.name, 
-                        number: post.number
-                    }}
-                >
-                    <div key={post.id} className="post_card">
+                    <div 
+                        key={post.id} 
+                        className="post_card"
+                        onClick={() => navigate("/postDetail.js", {
+                            state: { 
+                                postId: post.id, 
+                                title: post.title, 
+                                picture: post.picture, 
+                                content: post.content, 
+                                userId: post.user_id, 
+                                createdAt: post.created_at, 
+                                name: post.name, 
+                                number: post.number
+                            }
+                        })}
+                    >
                         <div className="post_header">
-                            {isDeleteMode && (
-                                <input
-                                    type="checkbox"
-                                    checked={selectedPosts.includes(post.id)}
-                                    onChange={() => handleCheckboxChange(post.id)}
-                                />
-                            )}
+                            <input
+                                type="checkbox"
+                                checked={!!selectedPosts[post.id]} // 선택된 상태는 객체로 관리
+                                onClick={(event) => event.stopPropagation()} // 클릭 시 부모 클릭 이벤트 전파 방지
+                                onChange={() => handleCheckboxChange(post.id)} // 해당 체크박스만 반전
+                            />
                             <div className="post_user_info">
                                 <span className="username">{post.name || "익명"}</span>
                                 <span className="post_date">
@@ -151,10 +143,8 @@ export default function MyBoard() {
                             )}
                         </div>
                     </div>
-                    </Link>
                 ))}
             </div>
-
 
             <Pagination
                 postsPerPage={postsPerPage}

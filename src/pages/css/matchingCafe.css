@@ -1,49 +1,73 @@
 .matching_bt {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    color: white;
-    margin-top: 20px;
-  }
-  
-.groupBt{
-    background-color: #D9D9D9;
-    color: white;
-    border: none;
-    border-radius: 10px 0 0 10px;
-    font-size: 17px;
-    height: 50px;
-    width: 150px;
-    margin: 20px 1px 10px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  color: white;
+  margin-top: 20px;
 }
+
+.groupBt{
+  background-color: #D9D9D9;
+  color: white;
+  border: none;
+  border-radius: 10px 0 0 10px;
+  font-size: 17px;
+  height: 50px;
+  width: 150px;
+  margin: 20px 1px 10px 0;
+}
+
 .matchingCafeBt {
-    background-color: #D9D9D9;
-    color: white;
-    border: none;
-    border-radius: 0 10px 10px 0;
-    font-size: 17px;
-    height: 50px;
-    width: 150px;
-    margin: 20px 0 10px 1px;
-  }
+  background-color: #D9D9D9;
+  color: white;
+  border: none;
+  border-radius: 0 10px 10px 0;
+  font-size: 17px;
+  height: 50px;
+  width: 150px;
+  margin: 20px 0 10px 1px;
+}
 
 .container {
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px;
-  margin: 0 50px;
+flex-wrap: wrap;
+gap: 10px;
+padding: 10px;
+margin: 0 50px;
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
-  display: inline-block;
-  margin: 20px;
-  float: left;
+display: flex;
+flex-direction: column;
+align-items: center;
+border: 1px solid #ddd;
+border-radius: 5px;
+padding: 10px; 
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+background-color: #fff;
+display: inline-block;
+margin: 30px;
+width: 250px;          
+height: 90%; 
+
+}
+
+.card img {
+width: 180px;          
+height: 180px;        
+object-fit: cover;    
+border-bottom: 1px solid #ddd;
+border-radius: 5px
+}
+
+.card .title {
+font-size: 1.1em;
+font-weight: bold;
+color: #515151;
+margin: 10px 0;
+}
+
+.card .address {
+font-size: 1em;
+color: #515151;
+margin-bottom: 10px;
 }

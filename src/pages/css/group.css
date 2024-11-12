@@ -26,3 +26,19 @@
     width: 150px;
     margin: 20px 0 10px 1px;
   }
+
+  .groupMenu_bt {
+    text-align: right;
+    color: white;
+    margin-right: 200px;
+  }
+  .groupFormBt {
+    background-color: #D9D9D9;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    height: 50px;
+    width: 150px;
+    margin: 20px 0 10px 1px;
+  }

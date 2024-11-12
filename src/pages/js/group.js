@@ -27,6 +27,11 @@ export default function Group() {
                 <button className='matchingCafeBt'>매칭</button>
                 </Link>
             </div>
+            <div className='groupMenu_bt'>
+                <Link to="/groupForm.js">
+                <button className='groupFormBt'>모임추가</button>
+                </Link>
+            </div>
 
             <Voc />
         </div>
