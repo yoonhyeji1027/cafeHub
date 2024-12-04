@@ -232,7 +232,7 @@ export default function Main() {
         if (imageUrl) {
             const image = document.createElement('img');
             image.src = imageUrl;
-            image.className = "cafe-image"; 
+            image.className = "cafe-image01"; 
             console.log('First Image URL:', imageUrl); 
             info.appendChild(image);
         }
@@ -241,7 +241,7 @@ export default function Main() {
         if (imageUrl2) {
             const image = document.createElement('img');
             image.src = imageUrl2;
-            image.className = "cafe-image2"; 
+            image.className = "cafe-image02"; 
             info.appendChild(image); 
         }
 

@@ -29,14 +29,14 @@ export default function MatchingCafe() {
         const fetchCafes = async () => {
             try {
                 const { data, error } = await supabase
-                    .from('matchingcafe')
-                    .select('title, image_url, address'); // 필요한 컬럼만 선택
+                    .from('cafes')
+                    .select('name, image_url, address, latitude, longitude, description'); 
 
                 if (error) {
                     console.error("Error fetching cafes:", error);
                 } else {
-                    console.log("Fetched cafes:", data); // 데이터를 콘솔로 출력하여 확인
-                    setCafes(data);  // 데이터 상태에 저장
+                    console.log("Fetched cafes:", data); 
+                    setCafes(data); 
                 }
             } catch (error) {
                 console.error("Unexpected error:", error);
@@ -64,15 +64,15 @@ export default function MatchingCafe() {
                 <Container>
                     <Row>
                         {loading ? (
-                            <p>로딩 중...</p> // 로딩 중 표시
+                            <p>로딩 중...</p> 
                         ) : (
                             cafes.length === 0 ? (
-                                <p>카페 정보가 없습니다.</p> // 데이터가 없을 경우
+                                <p>카페 정보가 없습니다.</p> 
                             ) : (
                                 cafes.map((cafe, index) => (
                                     <Card
                                         key={index}
-                                        cafes={cafe}  // 카페 데이터를 Card 컴포넌트로 전달
+                                        cafes={cafe}  
                                     />
                                 ))
                             )

@@ -1,13 +1,11 @@
 import React from 'react';
 
-const CommonTableRow = ({ children }) => {
+function CommonTableRow({ children, onClick }) {
   return (
-    <tr className="common-table-row">
-      {
-        children
-      }
+    <tr onClick={onClick} style={{ cursor: 'pointer' }}>
+      {children}
     </tr>
-  )
+  );
 }
 
 export default CommonTableRow;

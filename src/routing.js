@@ -16,6 +16,7 @@ import MatchingCafe from "./pages/js/matchingCafe.js";
 import MatchingSignUp from "./pages/js/matchingSignUp.js"; 
 import MatchingSuccess from "./pages/js/matchingSuccess.js"; 
 import GroupForm from "./pages/js/groupForm.js";
+import GroupDetail from "./pages/js/groupDetail.js";
 
 
 
@@ -39,9 +40,10 @@ function Routing() {
             <Route path='/addBoard.js' element={<AddBoard />} />
             <Route path='/group.js' element={<Group />} />
             <Route path='/matchingCafe.js' element={<MatchingCafe />} />
-            <Route path='/matchingSignUp' element={<MatchingSignUp />} />
-            <Route path='/matchingSuccess' element={<MatchingSuccess />} />
+            <Route path='/matchingSignUp.js' element={<MatchingSignUp />} />
+            <Route path='/matchingSuccess.js' element={<MatchingSuccess />} />
             <Route path='/groupForm.js' element={<GroupForm />} />
+            <Route path='/groupDetail.js' element={<GroupDetail />} />
 
 
         </Routes>
