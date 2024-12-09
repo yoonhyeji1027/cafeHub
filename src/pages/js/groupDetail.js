@@ -1,8 +1,14 @@
-import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Nav_login from './nav_login.js';
 import { supabase } from '../../utils/SupabaseClient.ts';
+import emailjs from 'emailjs-com';
 import '../css/groupDetail.css';
+
+function getSession() {
+  const session = JSON.parse(localStorage.getItem('session'));
+  return session;
+}
 
 function GroupDetail() {
   const location = useLocation();
@@ -10,6 +16,14 @@ function GroupDetail() {
   const { item } = location.state || {};
 
   const [groupDetails, setGroupDetails] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const session = getSession();
+    if (session) {
+      setIsLoggedIn(true); // 세션이 있으면 로그인 상태로 설정
+    }
+  }, []);
 
   useEffect(() => {
     const fetchGroupDetails = async () => {
@@ -39,10 +53,35 @@ function GroupDetail() {
   };
 
   const handleApply = () => {
+    const session = getSession();
+    if (!session || !session.user_id) {
+      alert('세션 유저 정보를 확인할 수 없습니다.');
+      return;
+    }
+
     const confirmed = window.confirm('해당 모임에 가입을 신청하시겠습니까?');
     if (confirmed) {
-      // 가입 신청 처리 로직 추가
-      console.log('가입 신청을 완료했습니다.');
+      const templateParams = {
+        group_name: item.group_name,
+        name: session.name,
+        user_email: session.email,
+        phone_number: session.phone_number,
+        message: `${item.group_name} 모임에 새로운 가입 신청이 들어왔습니다.`,
+        user_id: session.user_id,
+      };
+
+      emailjs
+        .send('service_ju8jhjk', 'template_m87wdv8', templateParams, 'Ve6bFjXhWRZ7xAshS')
+        .then(
+          (result) => {
+            alert('가입 신청이 완료되었습니다. 관리자에게 알림이 전송되었습니다.');
+            console.log('Email successfully sent:', result.text);
+          },
+          (error) => {
+            alert('가입 신청 처리 중 문제가 발생했습니다. 다시 시도해주세요.');
+            console.error('Email sending failed:', error);
+          }
+        );
     }
   };
 

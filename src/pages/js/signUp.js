@@ -12,7 +12,7 @@ export default function SignUp() {
         name: '',
         user_id: '',
         password: '',
-        phone_number: '',
+        email: '',
     });
 
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -62,31 +62,31 @@ export default function SignUp() {
         }
     };
 
-    const checkPhoneNumberDuplicate = async (phone_number: string) => {
+    const checkEmailDuplicate = async (email: string) => {
         try {
             const { data, error } = await supabase
                 .from('cafehub_user')
-                .select('phone_number')
-                .eq('phone_number', phone_number);
+                .select('email')
+                .eq('email', email);
 
             if (error) throw error;
 
             return data.length > 0;
         } catch (error) {
-            console.error('전화번호 중복 확인 오류:', error.message);
+            console.error('이메일 중복 확인 오류:', error.message);
             return false;
         }
     };
 
     const validateInput = () => {
-        const { name, user_id, password, phone_number } = userInfo;
+        const { name, user_id, password, email } = userInfo;
 
         if (name.length < 2 || /\s/.test(name)) {
             alert("이름은 공백 없이 2자 이상이어야 합니다.");
             return false;
         }
-        if (phone_number.length < 9 || /\s/.test(phone_number)) {
-            alert("전화번호는 공백 없이 9자 이상이어야 합니다.");
+        if (!/^[\w-.]+@[\w-]+\.[a-z]{2,}$/.test(email)) {
+            alert("유효한 이메일 주소를 입력해주세요.");
             return false;
         }
         if (user_id.length < 3 || /\s/.test(user_id)) {
@@ -105,23 +105,23 @@ export default function SignUp() {
     };
 
     const handleSubmit = async () => {
-        const { name, user_id, password, phone_number } = userInfo;
+        const { name, user_id, password, email } = userInfo;
 
         if (!validateInput()) {
             return;
         }
 
-        const isPhoneNumberDuplicate = await checkPhoneNumberDuplicate(phone_number);
+        const isEmailDuplicate = await checkEmailDuplicate(email);
 
-        if (isPhoneNumberDuplicate) {
-            alert("이미 가입된 전화번호입니다.");
+        if (isEmailDuplicate) {
+            alert("이미 가입된 이메일입니다.");
             return;
         }
 
         try {
             const { data, error } = await supabase
                 .from('cafehub_user')
-                .insert([{ name, user_id, password, phone_number }]);
+                .insert([{ name, user_id, password, email }]);
 
             if (error) throw error;
 
@@ -152,11 +152,11 @@ export default function SignUp() {
                         onChange={handleChange}
                     />
                     <input
-                        type="text"
-                        className='userPhone'
-                        name="phone_number"
-                        placeholder='전화번호'
-                        value={userInfo.phone_number}
+                        type="email"
+                        className='userEmail'
+                        name="email"
+                        placeholder='이메일'
+                        value={userInfo.email}
                         onChange={handleChange}
                     />
                     <div className="idCheck">
@@ -165,7 +165,7 @@ export default function SignUp() {
                             className='userId'
                             name="user_id"
                             placeholder='아이디'
-                            value={userInfo.id}
+                            value={userInfo.user_id}
                             onChange={handleChange}
                         />
                         <button id="idCheck_bt" onClick={handleIdCheck}>확인</button>
