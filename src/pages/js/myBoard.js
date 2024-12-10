@@ -40,10 +40,15 @@ export default function MyBoard() {
     };
 
     const handleCheckboxChange = (postId) => {
-        setSelectedPosts((prevSelectedPosts) => ({
-            ...prevSelectedPosts,
-            [postId]: !prevSelectedPosts[postId], // 클릭한 체크박스만 상태 반전
-        }));
+        setSelectedPosts((prevSelectedPosts) => {
+            const updatedSelection = { ...prevSelectedPosts };
+            if (updatedSelection[postId]) {
+                delete updatedSelection[postId]; // 체크 해제 시 삭제
+            } else {
+                updatedSelection[postId] = true; // 체크 시 추가
+            }
+            return updatedSelection;
+        });
     };
 
     const deleteSelectedPosts = async () => {
@@ -55,8 +60,6 @@ export default function MyBoard() {
             .from('posts')
             .delete()
             .in('id', postIdsToDelete);
-
-        navigate('/community.js');
 
         if (error) {
             console.error("Error deleting posts:", error);

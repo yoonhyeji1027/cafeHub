@@ -9,44 +9,53 @@ export default function Mypage() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userInfo, setUserInfo] = useState({
         name: '',
-        phoneNumber: '',
+        email: '',
         userId: '',
     });
     const [isEditing, setIsEditing] = useState(false);
+    const [groupList, setGroupList] = useState([]);
 
     useEffect(() => {
         const session = localStorage.getItem('session');
-        if (session) {
+        const userId = localStorage.getItem('user_id');
+
+        if (session && userId) {
             setIsLoggedIn(true);
-            fetchUserInfo();
+            fetchUserInfo(userId);
+            fetchGroupList(userId);
         } else {
-            setIsLoggedIn(false);
-            setUserInfo({
-                name: '',
-                phoneNumber: '',
-                userId: '',
-            });
+            handleLogout(); // 세션이 없으면 초기화
         }
     }, []);
 
-    const fetchUserInfo = async () => {
-        const userId = localStorage.getItem('user_id'); // 현재 로그인된 사용자의 ID
-        if (userId) {
-            const { data, error } = await supabase
-                .from('cafehub_user')
-                .select('name, phone_number, user_id')
-                .eq('user_id', userId)
-                .single();
+    const fetchUserInfo = async (userId) => {
+        const { data, error } = await supabase
+            .from('cafehub_user')
+            .select('name, email, user_id')
+            .eq('user_id', userId)
+            .single();
 
-            if (error) {
-                console.error("Error fetching user info:", error);
-            } else {
-                setUserInfo({
-                    name: data.name,
-                    phoneNumber: data.phone_number,
-                    userId: data.user_id,
-                });
-            }
+        if (error) {
+            console.error("Error fetching user info:", error);
+        } else {
+            setUserInfo({
+                name: data.name,
+                email: data.email,
+                userId: data.user_id,
+            });
+        }
+    };
+
+    const fetchGroupList = async (userId) => {
+        const { data, error } = await supabase
+            .from('group')
+            .select('group_name, created_at, name')
+            .eq('user_id', userId);
+
+        if (error) {
+            console.error("Error fetching group list:", error);
+        } else {
+            setGroupList(data || []);
         }
     };
 
@@ -59,11 +68,11 @@ export default function Mypage() {
     };
 
     const handleUpdate = async () => {
-        const { userId, name, phoneNumber } = userInfo;
+        const { userId, name, email } = userInfo;
 
         const { error } = await supabase
             .from('cafehub_user')
-            .update({ name, phone_number: phoneNumber })
+            .update({ name, email })
             .eq('user_id', userId);
 
         if (error) {
@@ -78,7 +87,7 @@ export default function Mypage() {
         localStorage.removeItem('session');
         localStorage.removeItem('user_id');
         setIsLoggedIn(false);
-        setUserInfo({ name: '', phoneNumber: '', userId: '' }); // 사용자 정보 초기화
+        setUserInfo({ name: '', email: '', userId: '' });
     };
 
     return (
@@ -102,12 +111,12 @@ export default function Mypage() {
                                 placeholder='이름'
                             />
                             <input
-                                type="text"
-                                className='userPhone'
-                                name="phoneNumber"
-                                value={userInfo.phoneNumber}
+                                type="email"
+                                className='userEmail'
+                                name="email"
+                                value={userInfo.email}
                                 onChange={handleInputChange}
-                                placeholder='전화번호'
+                                placeholder='이메일'
                             />
                             <div className="idCheck">
                                 <div className='userIdLogin'>아이디: {userInfo.userId}</div>
@@ -117,7 +126,7 @@ export default function Mypage() {
                     ) : (
                         <>
                             <div className='userName'>이름: {userInfo.name || "정보 없음"}</div>
-                            <div className='userPhone'>전화번호: {userInfo.phoneNumber || "정보 없음"}</div>
+                            <div className='userEmail'>이메일: {userInfo.email || "정보 없음"}</div>
                             <div className="idCheck">
                                 <div className='userIdLogin'>아이디: {userInfo.userId || "정보 없음"}</div>
                             </div>
@@ -130,6 +139,20 @@ export default function Mypage() {
                         <button id="myPageBt" onClick={handleUpdate}>수정 완료</button>
                     ) : (
                         <button id="myPageBt" onClick={() => setIsEditing(true)}>수정</button>
+                    )}
+                </div>
+                <div className='groupList'>
+                    <h2>내가 속한 모임</h2>
+                    {groupList.length > 0 ? (
+                        <ul>
+                            {groupList.map((group, index) => (
+                                <li key={index}>
+                                    <strong>{group.group_name}</strong> - 모임장: {group.name || "정보 없음"}
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>속해 있는 모임이 없습니다.</p>
                     )}
                 </div>
             </div>

@@ -7,7 +7,6 @@ import Nav_login from './nav_login.js';
 export default function AddBoard() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [title, setTitle] = useState('');
-    const [picture, setPicture] = useState(null); // 파일 업로드를 위한 상태
     const [content, setContent] = useState(''); // 게시글 내용
     const [userName, setUserName] = useState(''); // 사용자의 이름을 저장할 상태
     const navigate = useNavigate();
@@ -23,7 +22,6 @@ export default function AddBoard() {
 
     // 오류 처리 함수
     const handleError = (error) => {
-        // error가 Event 객체인지 확인
         if (error instanceof Event) {
             console.error("An event error occurred:", error);
             alert(`Error: An unexpected error occurred.`);
@@ -54,31 +52,6 @@ export default function AddBoard() {
         }
     };
 
-    // 이미지 업로드 함수
-    const uploadImage = async () => {
-        if (!picture) return null;
-
-        try {
-            const fileExt = picture.name.split('.').pop();
-            const fileName = `${Date.now()}.${fileExt}`;
-            const { data, error } = await supabase.storage
-                .from('posts')
-                .upload(`public/${fileName}`, picture);
-
-            if (error) throw new Error(`Error uploading image: ${error.message}`);
-
-            // 업로드한 이미지의 public URL 가져오기
-            const { data: publicUrlData } = supabase.storage
-                .from('posts')
-                .getPublicUrl(`public/${fileName}`);
-
-            return publicUrlData.publicUrl;
-        } catch (err) {
-            handleError(err); // 오류 처리 함수 호출
-            return null;
-        }
-    };
-
     // 글 발행 함수
     const handleAddPost = async (e) => {
         e.preventDefault();
@@ -91,10 +64,8 @@ export default function AddBoard() {
         }
 
         try {
-            const imageUrl = await uploadImage(); // 이미지 업로드 후 URL 가져오기
-
             const { error } = await supabase.from('posts').insert([
-                { title, picture: imageUrl, content: content.replace(/\n/g, '\\n'), user_id, name: userName } // 줄바꿈 포함
+                { title, content: content.replace(/\n/g, '\\n'), user_id, name: userName } // 줄바꿈 포함
             ]);
 
             if (error) throw new Error(error.message);
@@ -125,21 +96,6 @@ export default function AddBoard() {
                                 autoFocus
                                 value={title}
                                 onChange={(e) => setTitle(e.target.value)}
-                            />
-                        </div>
-                    </div>
-                    <div className='addBoard_menu'>
-                        <h4>사진첨부</h4> <p>|</p>
-                        <div className='addBoard_input'>
-                            <input
-                                type="file"
-                                className='addBoardPicture'
-                                accept="image/*"
-                                onChange={(e) => {
-                                    const selectedFile = e.target.files[0];
-                                    setPicture(selectedFile);
-                                    console.log('Selected file:', selectedFile);
-                                }}
                             />
                         </div>
                     </div>

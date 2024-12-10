@@ -57,7 +57,7 @@ export default function Group() {
                 </Link>
             </div>
 
-            <div className="groupList">
+            <div className="group_List">
                 {groups.map((group) => (
                     <div 
                         key={group.id} 

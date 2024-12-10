@@ -1,4 +1,4 @@
-#myPage_title{
+#myPage_title {
     margin: 50px;
 }
 .myPage_header p {
@@ -18,7 +18,7 @@
     margin-bottom: 30px;
 }
 
-.userName, .userPhone, .userIdLogin, .userPassword {
+.userName, .userEmail, .userIdLogin, .userPassword {
     width: 400px;
     height: 50px;
     border: 1px solid #A6A6A6;
@@ -47,7 +47,7 @@
     height: 50px;
     width: 350px;
     margin: 20px 0 10px 0;
-    transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
+    transition: background-color 0.3s ease;
 }
 
 #myPageBt:hover {
@@ -61,4 +61,58 @@
 
 .myPage_bt button {
     cursor: pointer;
+}
+
+.groupList {
+    width: 1000px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #A6A6A6;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+}
+
+.groupList h2 {
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.groupList ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.groupList li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+    color: #555;
+}
+
+.groupList li:last-child {
+    border-bottom: none;
+}
+
+.groupList li strong {
+    color: #333;
+    font-weight: bold;
+}
+
+.groupList li span {
+    font-size: 14px;
+    color: #888;
+}
+
+.groupList p {
+    text-align: center;
+    color: #888;
+    font-size: 16px;
+    margin-top: 20px;
 }
