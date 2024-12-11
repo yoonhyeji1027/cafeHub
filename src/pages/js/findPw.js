@@ -1,17 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import "../css/findPw.css";
 import Nav from './nav.js';
 import { supabase } from '../../utils/SupabaseClient.ts';
 
 export default function FindPw() {
+    const navigate = useNavigate(); // useNavigate 훅 사용
     const [userInfo, setUserInfo] = useState({
         name: '',
-        phone_number: '',
-        id: '',
+        email: '',
+        user_id: '',
     });
 
-    const [password, setPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [isVerified, setIsVerified] = useState(false); // 사용자 확인 상태
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -21,10 +24,10 @@ export default function FindPw() {
         }));
     };
 
-    const handleSubmit = async () => {
-        const { name, phone_number, id } = userInfo;
+    const handleVerify = async () => {
+        const { name, email, user_id } = userInfo;
 
-        if (!name || !phone_number || !id) {
+        if (!name || !email || !user_id) {
             alert("모든 필드를 입력해주세요.");
             return;
         }
@@ -32,21 +35,48 @@ export default function FindPw() {
         try {
             const { data, error } = await supabase
                 .from('cafehub_user')
-                .select('password')
+                .select('*')
                 .eq('name', name)
-                .eq('phone_number', phone_number)
-                .eq('id', id);
+                .eq('email', email)
+                .eq('user_id', user_id);
 
             if (error) throw error;
 
             if (data.length === 0) {
-                alert("사용자를 찾을 수 없습니다.");
+                setIsVerified(false);
+                setErrorMessage('사용자를 찾을 수 없습니다.');
             } else {
-                setPassword(data[0].password);
+                setIsVerified(true); // 사용자 확인 성공
+                setErrorMessage('');
             }
         } catch (error) {
-            console.error('비밀번호 찾기 오류:', error.message);
-            alert('비밀번호 찾기 중 오류가 발생했습니다. 다시 시도해주세요.');
+            console.error('사용자 확인 오류:', error.message);
+            setErrorMessage('사용자 확인 중 오류가 발생했습니다.');
+        }
+    };
+
+    const handleResetPassword = async () => {
+        if (!newPassword) {
+            alert('새 비밀번호를 입력해주세요.');
+            return;
+        }
+
+        try {
+            const { name, email, user_id } = userInfo;
+            const { error } = await supabase
+                .from('cafehub_user')
+                .update({ password: newPassword }) // 비밀번호 업데이트
+                .eq('name', name)
+                .eq('email', email)
+                .eq('user_id', user_id);
+
+            if (error) throw error;
+
+            alert('비밀번호가 성공적으로 변경되었습니다.');
+            navigate('/login.js'); // 로그인 페이지로 이동
+        } catch (error) {
+            console.error('비밀번호 재설정 오류:', error.message);
+            alert('비밀번호 재설정 중 오류가 발생했습니다.');
         }
     };
 
@@ -69,28 +99,42 @@ export default function FindPw() {
                         onChange={handleChange}
                     />
                     <input
-                        type="text"
-                        className='userPhone'
-                        name="phone_number"
-                        placeholder='전화번호'
-                        value={userInfo.phone_number}
+                        type="email"
+                        className='userEmail'
+                        name="email"
+                        placeholder='이메일'
+                        value={userInfo.email}
                         onChange={handleChange}
                     />
                     <input
                         type="text"
                         className='userIdLogin'
-                        name="id"
+                        name="user_id"
                         placeholder='아이디'
-                        value={userInfo.id}
+                        value={userInfo.user_id}
                         onChange={handleChange}
                     />
                 </div>
                 <div className='findPw_bt'>
-                    <button id="findPwBt" onClick={handleSubmit}>찾기</button>
+                    <button id="findPwBt" onClick={handleVerify}>확인</button>
                 </div>
-                <div className='findPw_result'>
-                    {password && <p>비밀번호: {password}</p>}
-                </div>
+                {isVerified && (
+                    <div className='resetPw_section'>
+                        <input
+                            type="password"
+                            className='newPassword'
+                            placeholder='새 비밀번호'
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                        />
+                        <button id="resetPwBt" onClick={handleResetPassword}>비밀번호 재설정</button>
+                    </div>
+                )}
+                {errorMessage && (
+                    <div className='error_message'>
+                        <p>{errorMessage}</p>
+                    </div>
+                )}
                 <div className='findPw_menu'>
                     <Link to="/findId.js">아이디 찾기</Link>
                 </div>

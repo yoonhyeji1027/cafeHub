@@ -7,7 +7,7 @@ import { supabase } from '../../utils/SupabaseClient.ts';
 export default function FindId() {
     const [userInfo, setUserInfo] = useState({
         name: '',
-        phoneNumber: '',
+        email: '',
     });
 
     const [foundId, setFoundId] = useState(null);
@@ -22,25 +22,25 @@ export default function FindId() {
     };
 
     const handleFindId = async () => {
-        const { name, phoneNumber } = userInfo;
+        const { name, email } = userInfo;
 
-        if (!name || !phoneNumber) {
-            alert("이름과 전화번호를 입력해주세요.");
+        if (!name || !email) {
+            alert("이름과 이메일을 입력해주세요.");
             return;
         }
 
         try {
             const { data, error } = await supabase
                 .from('cafehub_user')
-                .select('id')
+                .select('user_id')
                 .eq('name', name)
-                .eq('phone_number', phoneNumber)
+                .eq('email', email)
                 .single();
 
             if (error) throw error;
 
             if (data) {
-                setFoundId(data.id);
+                setFoundId(data.user_id);
                 setErrorMessage(null);
             } else {
                 setFoundId(null);
@@ -72,11 +72,11 @@ export default function FindId() {
                         onChange={handleChange}
                     />
                     <input
-                        type="text"
-                        className='userPhone'
-                        name="phoneNumber"
-                        placeholder='전화번호'
-                        value={userInfo.phoneNumber}
+                        type="email"
+                        className='userEmail'
+                        name="email"
+                        placeholder='이메일'
+                        value={userInfo.email}
                         onChange={handleChange}
                     />
                 </div>

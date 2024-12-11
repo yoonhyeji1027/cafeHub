@@ -56,3 +56,34 @@
 .findPw_menu a:hover {
     color: gray;
 }
+
+.resetPw_section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.newPassword {
+    width: 400px;
+    height: 50px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 0 10px;
+    margin-bottom: 10px;
+}
+
+#resetPwBt {
+    background-color: #A6A6A6;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 17px;
+    height: 50px;
+    width: 350px;
+    margin: 20px 0 10px 0;
+}
+
+#resetPwBt:hover {
+    background-color: #cccccc;
+}
