@@ -11,6 +11,7 @@ import FindId from "./pages/js/findId.js";
 import FindPw from "./pages/js/findPw.js";
 import AddBoard from "./pages/js/addBoard.js";
 import MyBoard from "./pages/js/myBoard.js";
+import PostDetail from "./pages/js/postDetail.js";
 import Group from "./pages/js/group.js";
 import MatchingCafe from "./pages/js/matchingCafe.js";
 import MatchingSignUp from "./pages/js/matchingSignUp.js";
@@ -40,6 +41,7 @@ function Routing() {
           <Route path='/findPw.js' element={<FindPw />} />
           <Route path='/myBoard.js' element={<MyBoard />} />
           <Route path='/addBoard.js' element={<AddBoard />} />
+          <Route path='/postDetail.js' element={<PostDetail />} />
           <Route path='/group.js' element={<Group />} />
           <Route path='/matchingCafe.js' element={<MatchingCafe />} />
           <Route path='/matchingSignUp.js' element={<MatchingSignUp />} />

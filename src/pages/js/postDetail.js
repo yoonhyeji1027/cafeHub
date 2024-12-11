@@ -160,32 +160,43 @@ export default function PostDetail() {
                 </div>
 
                 <div className="comments_section">
-                    <h3>댓글</h3>
-                    <ul>
-                        {comments.map((comment, index) => (
-                            <li key={index}>
-                                <div className="comment_header">
-                                    <span className="comment_username">{comment.name}</span>
-                                    <span className="comment_date">{comment.date}</span>
-                                </div>
-                                <p className="comment_content">{comment.content}</p>
-                            </li>
-                        ))}
-                    </ul>
-
-                    <form onSubmit={handleCommentSubmit} className="comment_form">
-                        <input
-                            type="text"
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                            placeholder="댓글을 입력하세요"
-                            className="comment_input"
-                        />
-                        <button type="submit" className="submit_comment_button">
-                            댓글 작성
-                        </button>
-                    </form>
+    <h3>댓글</h3>
+    <ul>
+        {comments.map((comment, index) => (
+            <li key={index}>
+                <div className="comment_header">
+                    <span className="comment_username">{comment.name}</span>
+                    <span className="comment_date">
+                        {new Date(comment.date).toLocaleString('ko-KR', {
+                            year: '2-digit',
+                            month: '2-digit',
+                            day: '2-digit',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            hour12: false // 24시간제
+                        })}
+                    </span>
                 </div>
+                <p className="comment_content">{comment.content}</p>
+            </li>
+        ))}
+    </ul>
+
+    <form onSubmit={handleCommentSubmit} className="comment_form">
+        <input
+            type="text"
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="댓글을 입력하세요"
+            className="comment_input"
+        />
+        <button type="submit" className="submit_comment_button">
+            댓글 작성
+        </button>
+    </form>
+</div>
+
+
 
                 <div className="back_to_community">
                     <Link to="/community.js">

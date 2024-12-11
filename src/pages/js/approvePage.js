@@ -141,7 +141,6 @@ function ApprovePage() {
                 <th>선택</th>
                 <th>이름</th>
                 <th>이메일</th>
-                <th>전화번호</th>
                 <th>모임명</th>
                 <th>신청자 ID</th>
               </tr>
@@ -158,7 +157,6 @@ function ApprovePage() {
                   </td>
                   <td>{applicant.name}</td>
                   <td>{applicant.email}</td>
-                  <td>{applicant.phone_number}</td>
                   <td>{applicant.group_name}</td>
                   <td>{applicant.user_id}</td>
                 </tr>

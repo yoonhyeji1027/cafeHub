@@ -9,6 +9,7 @@ export default function AddBoard() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState(''); // 게시글 내용
     const [userName, setUserName] = useState(''); // 사용자의 이름을 저장할 상태
+    const [isPostCreated, setIsPostCreated] = useState(false); // 게시물 등록 완료 상태
     const navigate = useNavigate();
 
     // 페이지 로드 시 세션 확인
@@ -70,7 +71,10 @@ export default function AddBoard() {
 
             if (error) throw new Error(error.message);
 
-            navigate('/community.js'); // 발행 후 커뮤니티 페이지로 이동
+            setIsPostCreated(true); // 게시물 등록 완료
+            setTimeout(() => {
+                navigate('/community.js'); // 일정 시간 후 커뮤니티 페이지로 이동
+            }, 2000); // 2초 후에 커뮤니티 페이지로 이동
         } catch (err) {
             handleError(err); // 오류 처리 함수 호출
         }
@@ -115,6 +119,12 @@ export default function AddBoard() {
                     <button type="submit" className='addBoardAddBt'>발행하기</button>
                 </div>
             </form>
+
+            {isPostCreated && (
+                <div className="success-message">
+                    <p>등록 완료되었습니다! 잠시 후 커뮤니티 페이지로 이동합니다.</p>
+                </div>
+            )}
         </div>
     );
 }

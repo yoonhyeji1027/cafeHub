@@ -54,26 +54,33 @@ export default function MyBoard() {
     const deleteSelectedPosts = async () => {
         const confirmDelete = window.confirm("정말로 선택한 글들을 삭제하시겠습니까?");
         if (!confirmDelete) return;
-
+    
         const postIdsToDelete = Object.keys(selectedPosts).filter(postId => selectedPosts[postId]);
         const { error } = await supabase
             .from('posts')
             .delete()
-            .in('id', postIdsToDelete);
-
+            .in('number', postIdsToDelete);
+    
         if (error) {
             console.error("Error deleting posts:", error);
         } else {
-            setPosts(posts.filter(post => !postIdsToDelete.includes(post.id)));
-            setSelectedPosts({}); // 삭제 후 선택 상태 초기화
+            // 삭제 후 선택된 게시글 제거
+            setPosts(posts.filter(post => !postIdsToDelete.includes(post.number)));
+            setSelectedPosts({}); // 선택 상태 초기화
+            
+            // 페이지 새로고침
+            window.location.reload();
         }
     };
+    
 
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
     const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
 
     return (
         <div>
@@ -98,11 +105,11 @@ export default function MyBoard() {
             <div className="posts">
                 {currentPosts.map((post) => (
                     <div 
-                        key={post.id} 
+                        key={post.number} 
                         className="post_card"
                         onClick={() => navigate("/postDetail.js", {
                             state: { 
-                                postId: post.id, 
+                                postId: post.number, 
                                 title: post.title, 
                                 picture: post.picture, 
                                 content: post.content, 
@@ -116,9 +123,9 @@ export default function MyBoard() {
                         <div className="post_header">
                             <input
                                 type="checkbox"
-                                checked={!!selectedPosts[post.id]} // 선택된 상태는 객체로 관리
+                                checked={!!selectedPosts[post.number]} // 선택된 상태는 객체로 관리
                                 onClick={(event) => event.stopPropagation()} // 클릭 시 부모 클릭 이벤트 전파 방지
-                                onChange={() => handleCheckboxChange(post.id)} // 해당 체크박스만 반전
+                                onChange={() => handleCheckboxChange(post.number)} // 해당 체크박스만 반전
                             />
                             <div className="post_user_info">
                                 <span className="username">{post.name || "익명"}</span>
@@ -166,6 +173,8 @@ function Pagination({ postsPerPage, totalPosts, paginate, currentPage }) {
     for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
     }
+
+
 
     return (
         <nav>
